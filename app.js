@@ -1,7 +1,11 @@
+//import library or modules
 const express= require('express');
 const morgan = require('morgan');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
 const {body, validationResult, check} = require('express-validator');
 const {loadContact, findContact, addContact} = require('./utils/contact');
 
@@ -17,6 +21,16 @@ app.use(morgan('dev'));
 // app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
+
+//config flash
+app.use(cookieParser('secret'));
+app.use(session({
+    cookie: {maxAge: 6000},
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(flash());
 
 const mahasiswa = [
     {
@@ -48,12 +62,15 @@ app.get('/about', (req, res) =>{
     });
 });
 app.get('/contact', (req, res) =>{
+    console.log('=====================');
+    console.log(req.flash('msg'));
+    console.log('=====================');
     const contacts = loadContact();
-    console.log(contacts)
     res.render('contact', {
         title: 'Halaman contact',
         layout: 'layouts/main-layout',
-        contacts
+        contacts,
+        msg: req.flash('msg')
     });
 });
 app.get('/contact/add', (req, res)=>{
@@ -75,9 +92,9 @@ app.post('/contact',[
         });
     }else{
         const data = req.body;
-        console.log("masuk kesini walaupun salah")
         addContact(data);
-        console.log('data berhasil ditambahkan');
+        //kirim flash message
+        req.flash('msg', 'Data contact berhasil ditambahkan!');
         res.redirect('/contact');
     }
 });
