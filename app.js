@@ -1,8 +1,8 @@
 const express= require('express');
 const morgan = require('morgan');
-const {nanoid} = require('nanoid');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
+const {body, validationResult, check} = require('express-validator');
 const {loadContact, findContact, addContact} = require('./utils/contact');
 
 const app = express();
@@ -62,12 +62,24 @@ app.get('/contact/add', (req, res)=>{
         layout: 'layouts/main-layout'
     });
 });
-app.post('/contact', (req, res) =>{
-    const data = req.body;
-    console.log(data)
-    addContact(data);
-    console.log('data berhasil ditambahkan');
-    res.redirect('/contact');
+app.post('/contact',[
+    check('email', 'Email tidak valid!').isEmail(),
+    check('nohp', 'nomor hp tidak valid!').isMobilePhone('id-ID')
+], (req, res) =>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        res.render('add-contact', {
+            title: 'Halaman add contact',
+            layout: 'layouts/main-layout',
+            errors: errors.array()
+        });
+    }else{
+        const data = req.body;
+        console.log("masuk kesini walaupun salah")
+        addContact(data);
+        console.log('data berhasil ditambahkan');
+        res.redirect('/contact');
+    }
 });
 app.get('/contact/:id', (req, res) =>{
     const contact = findContact(req.params.id);
