@@ -62,6 +62,7 @@ app.get('/about', (req, res) =>{
     });
 });
 app.get('/contact', (req, res) =>{
+    const msg = req.flash('msg');
     console.log('=====================');
     console.log(req.flash('msg'));
     console.log('=====================');
@@ -70,7 +71,7 @@ app.get('/contact', (req, res) =>{
         title: 'Halaman contact',
         layout: 'layouts/main-layout',
         contacts,
-        msg: req.flash('msg')
+        msg
     });
 });
 app.get('/contact/add', (req, res)=>{
