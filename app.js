@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const {body, validationResult, check} = require('express-validator');
-const {loadContact, findContact, addContact} = require('./utils/contact');
+const {loadContact, findContact, addContact, deleteContact} = require('./utils/contact');
 
 const app = express();
 const port = 3001;
@@ -98,6 +98,13 @@ app.post('/contact',[
         req.flash('msg', 'Data contact berhasil ditambahkan!');
         res.redirect('/contact');
     }
+});
+app.delete('/contact/:id', (req, res)=>{
+    const {id} = req.params
+    deleteContact(id);
+    //kirim flash message
+    req.flash('msg', 'Data contact berhasil dihapus!');
+    res.redirect('/contact');
 });
 app.get('/contact/:id', (req, res) =>{
     const contact = findContact(req.params.id);

@@ -38,5 +38,16 @@ const addContact = (data) => {
     const newContacts = JSON.stringify(contacts);
     fs.writeFileSync(dataPath, newContacts, 'utf-8');
 }
+const deleteContact = (id) =>{
+    const contact = loadContact();
+    const index = contact.findIndex(contact => contact.id === id);
+    if(index !== -1){
+        contact.splice(index, 1);
+        const newContacts = JSON.stringify(contact);
+        fs.writeFileSync(dataPath, newContacts, 'utf-8');
+    }else{
+        console.log('data tidak ditemukan');
+    }
 
-module.exports = {loadContact, findContact, addContact};
+}
+module.exports = {loadContact, findContact, addContact, deleteContact};
