@@ -7,15 +7,18 @@
                 Data kontak tidak ada! <a href="/contact" class="alert-link fw-normal">silahkan kembali ke kontak</a>
               </div>
         <% } else{ %>
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                <h5 class="card-title"><%= contact.nama %> </h5>
-                <h6 class="card-subtitle mb-2 text-muted"><%= contact.nohp %></h6>
-                <p class="card-text"><%= contact.email %></p>
-                <a href="/contact/<%= contact.id %> "><button class = "btn btn-danger badge" onclick="return confirm('yakin bro?')">delete</button></a>
-                <a href="/contact" class="card-link d-block mt-3">back to contact</a>
+            <form action="/contact" method="">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                    <h5 class="card-title"><%= contact.nama %> </h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><%= contact.nohp %></h6>
+                    <p class="card-text"><%= contact.email %></p>
+                    <a href= "/contact/<%= contact.id %>" class = "btn btn-danger badge" onclick="return confirm('yakin bro?')">delete</a>
+                    <a href= "/contact/<%= contact.id %>" class = "btn btn-primary badge" onclick="return confirm('yakin bro?')">update</a>
+                    <a href="/contact" class="card-link d-block mt-3">back to contact</a>
+                    </div>
                 </div>
-            </div>
+            </form>
         <% } %>
     </div>
  </div>

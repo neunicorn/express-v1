@@ -50,4 +50,15 @@ const deleteContact = (id) =>{
     }
 
 }
-module.exports = {loadContact, findContact, addContact, deleteContact};
+const updateContact = (id, data) =>{
+    const contacts = loadContact();
+    const index = contacts.findIndex(contact => contact.id === id);
+    if(index !== -1){
+        contacts[index] = {...contacts[index], ...data};
+        const newContacts = JSON.stringify(contacts);
+        fs.writeFileSync(dataPath, newContacts, 'utf-8');
+    }else{
+        console.log('data tidak ditemukan');
+    }
+};
+module.exports = {loadContact, findContact, addContact, deleteContact, updateContact};
